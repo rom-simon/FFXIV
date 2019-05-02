@@ -1,0 +1,22 @@
+{{ dump(leves) }}
+
+
+<table>
+    <thead>
+    <tr>
+        <td>Name</td>
+        <td>Exp</td>
+    </tr>
+    </thead>
+    <tbody>
+    {% for leve in leves %}
+    <tr>
+        <td>{{ leve.Name_fr }}</td>
+        <td>{{ leve.ExpReward }}</td>
+    </tr>
+
+
+
+    {% endfor %}
+    </tbody>
+</table>
