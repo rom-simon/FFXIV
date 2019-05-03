@@ -5,3 +5,7 @@
 test_api:
   path: /test/api
   controller: App\Controller\TestController::api
+
+test_jobs:
+  path: /test/jobs
+  controller: App\Controller\TestController::jobs

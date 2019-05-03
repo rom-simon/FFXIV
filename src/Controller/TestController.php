@@ -2,10 +2,11 @@
 
 namespace App\Controller;
 
+use App\Utils\Xiv;
+use App\Utils\XivApi;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Yaml\Yaml;
-use XIVAPI\XIVAPI;
 
 class TestController extends AbstractController
 {
@@ -14,7 +15,7 @@ class TestController extends AbstractController
         $job = Yaml::parseFile('./../config/Jobs/Carpenter.yaml');
         $leves = $job['leves'];
 
-        $api = new XIVAPI();
+        $api = new XivApi();
 //        $test = $api->content->Quest()->one(65539 . "?language=fr");
 //        $test = $api->search->find('quest')->results();
 //        $test = $api->search->find('Driving Up The Wall&indexes=Leve')->indexes(['Leve'])->results();
@@ -30,5 +31,12 @@ class TestController extends AbstractController
                 'leves' => $datas
             ]
         );
+    }
+
+    public function jobs()
+    {
+        $api = new Xiv();
+        dump($api->getCraftJobs());
+        exit;
     }
 }
