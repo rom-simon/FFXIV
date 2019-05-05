@@ -9,3 +9,7 @@ test_api:
 test_jobs:
   path: /test/jobs
   controller: App\Controller\TestController::jobs
+
+script_jobs:
+  path: /script/jobs
+  controller: App\Controller\ScriptController::addJobs

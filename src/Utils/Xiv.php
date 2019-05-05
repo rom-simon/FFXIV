@@ -13,6 +13,12 @@ class Xiv extends XIVAPI {
     private $class;
     private $jobs;
 
+    /**
+     * get method of jobs
+     * @var bool $jobsFull - get full jobs informations
+     */
+    private $jobsFull;
+
     public function __construct(string $environment = self::PROD)
     {
         parent::__construct($environment);
@@ -24,9 +30,22 @@ class Xiv extends XIVAPI {
         $this->class = $this->content->ClassJobCategory()->list()->Results;
     }
 
-    public function setJobs(): void
+    /**
+     * @param bool $full - true: get all details of jobs
+     */
+    public function setJobs($full = false): void
     {
-        $this->jobs = $this->class = $this->content->ClassJob()->list()->Results;
+        $jobs = $this->class = $this->content->ClassJob()->list()->Results;
+        if ($full){
+            $this->jobsFull = 1;
+            $this->jobs = [];
+            foreach ($jobs as $job){
+                $this->jobs[] = $this->content->ClassJob()->one($job->ID);
+            }
+        } else {
+            $this->jobsFull = 1;
+            $this->jobs = $jobs;
+        }
     }
 
 
@@ -42,9 +61,9 @@ class Xiv extends XIVAPI {
     /**
      * @return object
      */
-    public function getJobs()
+    public function getJobs($full = false)
     {
-        if ($this->jobs === null)$this->setJobs();
+        if ($this->jobs === null || $this->jobsFull !== $full)$this->setJobs($full);
         return $this->jobs;
     }
 
@@ -76,20 +95,31 @@ class Xiv extends XIVAPI {
 
 
     /**
+     * get all craft jobs
      * @throws \Exception
      */
     public function getCraftJobs(){
-        $craftClass = $this->getCraftClass();
-        $craftJobs = [];
-        $gatherClass = $this->getGatherClass();
-        $gatherJobs = [];
-
-        $allJobs = $this->getJobs();
+        $class = $this->getCraftClass();
+        $jobs = [];
+        $allJobs = $this->getJobs(true);
         foreach ($allJobs as $job){
-            $job = $this->content->ClassJob()->one($job->ID);
-            dump($job);
-            exit;
+            if ($job->ClassJobCategoryTargetID == $class->ID)$jobs[] = $job;
         }
+        return $jobs;
+    }
+
+    /**
+     * get all gather jobs
+     * @throws \Exception
+     */
+    public function getGatherJobs(){
+        $class = $this->getGatherClass();
+        $jobs = [];
+        $allJobs = $this->getJobs(true);
+        foreach ($allJobs as $job){
+            if ($job->ClassJobCategoryTargetID == $class->ID)$jobs[] = $job;
+        }
+        return $jobs;
     }
 
 }
