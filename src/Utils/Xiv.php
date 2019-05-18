@@ -35,7 +35,7 @@ class Xiv extends XIVAPI {
      */
     public function setJobs($full = false): void
     {
-        $jobs = $this->class = $this->content->ClassJob()->list()->Results;
+        $jobs = $this->content->ClassJob()->list()->Results;
         if ($full){
             $this->jobsFull = 1;
             $this->jobs = [];
@@ -86,10 +86,12 @@ class Xiv extends XIVAPI {
      */
     public function getGatherClass(){
         foreach ($this->getClass() as $class){
+            echo($class->Name . '<hr>');
             if ($class->Name == $this->config->class->gather->name){
                 return $this->content->ClassJobCategory()->one($class->ID);
             }
         }
+
         throw new \Exception("Gathering Class not found");
     }
 
